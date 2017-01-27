@@ -40,6 +40,7 @@ extern "C" {
 #define MSG_NEAREST_IMGS_LOCAL "Nearest images using local descriptors:\n"
 //General
 #define MAX_STRING 1024
+#define MAX_FILE_NAME 20
 #define CHAR_ALLOCATION_IN_MAIN 4
 #define MIN_NUM_OF_BINS 1
 #define MAX_NUM_OF_BINS 255
@@ -58,21 +59,18 @@ extern "C" {
  * getImagesPath
  * gets  Images path from the user, and saves it to imagePathInput.
  * @param imagePathInput - The pointer to the path of the images that the user will insert
- * @return NULL if allocation went wrong or if user didn't insert a path.
  */
 void getImagesPath(char** imagePathInput);
 /*
  * getImagesPrefix
  * gets  Images prefix from the user, and saves it to imagesPrefix.
  * @param imagesPrefix - The pointer to the images prefix that the user will insert
- * @return NULL if allocation went wrong or if user didn't insert a path.
  */
 void getImagesPrefix(char** imagesPrefix);
 /*
  * getImagesSuffix
  * gets  Images suffix  from the user, and saves it to imagesSuffixInput.
  * @param imagesSuffixInput - The pointer to the path of the images suffix that the user will insert
- * @return NULL if allocation went wrong or if user didn't insert a path.
  */
 void getImagesSuffix(char** imagesSuffixInput);
 /*
@@ -146,12 +144,11 @@ int searchUsingLocalFeatures(SPPoint** query, SPPoint*** SIFTDatabase,
  * queryOrTerminate
  * gets  imagesPath and query image name from the user, and saves it to query.
  * @param imagesPath - The path of the images
- * @return NULL if allocation went wrong or if user didn't insert a path.
+ * @return NULL if allocation went wrong or if user didn't insert a path,otherwise returns the user input.
  */
 
-char* queryOrTerminate(char* imagesPath);
+char* queryOrTerminate();
 
-void validateCharAllocation(char** validationArray, int size);//TODO delete
 /* destroy
  * uses all the destroy functions and destroys everything. exiting the program.
  *@param RGB - RGB SPPoint*** to be destroyed.
@@ -166,8 +163,6 @@ void validateCharAllocation(char** validationArray, int size);//TODO delete
 void destroy(SPPoint*** RGB, SPPoint*** SIFT, char* imagesPath,
 		char*imagesPrefix, char*imagesSuffix, char** validationArray,
 		int numOfImages);
-void destroyDatabases(SPPoint*** arrayToDestroy, int size);//TODO delete
-void destroyInputs(char* imagesPath, char* imagesPrefix, char* imagesSuffix);//TODO delete
 /*
  * destroyValidationArrayBySize
  * frees memory of all the allocations made for the contents of the array.
@@ -187,9 +182,6 @@ void destroyHistOrSIFT(SPPoint** toDestroy);
  * @param validationArray -array to free
  */
 void destroyValidationArray(char** validationArray);
-
-int comperator(const void * a, const void * b);
-
 /*
  * getHistogramsAndSiftDatabase
  * creates sift and histograms databases
@@ -207,4 +199,12 @@ int comperator(const void * a, const void * b);
 int* getHistogramsAndSiftDatabase(SPPoint**** RGBHistograms,
 		SPPoint**** SIFTDatabase, char* imagesPath, char* imagesSuffix,
 		char* imagesPrefix, int numOfImages, int numOfBins, int numOfFeatures);
+/**
+ * Trimming the name of the image file from the path.
+ * @param path - path to the file
+ * @return path if allocation failed, otherwise the file name.
+ */
+char* trimImageNameFromPath(char* path);
 #endif /* MAIN_AUX_H_ */
+
+

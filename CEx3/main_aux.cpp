@@ -246,7 +246,7 @@ int searchUsingLocalFeatures(SPPoint** query, SPPoint*** SIFTDatabase,
 	return SUCCESS;
 
 }
-char* queryOrTerminate(char* imagesPath) {
+char* queryOrTerminate() {
 	printf(INPUT_QUERY_OR_TERMINATE);
 	char* input = (char*) malloc(MAX_STRING * sizeof(char));
 	if (input == NULL) {
@@ -260,33 +260,19 @@ char* queryOrTerminate(char* imagesPath) {
 	}
 	if (input[0] == '#') {
 		printf(MSG_EXITING);
-		free(input);
+
 		return NULL;
 	}
-	char newstr[200];//TODO change to max_string
-	char* A;
-	char* B;
-
-	strncpy(newstr,imagesPath,strlen(imagesPath));
-	A=strstr(newstr,"images/");
-	B=strstr(input,"\n");
-	strncpy(B,"",2);
-	strcpy(A,input);
-	input =newstr;
-	return input;
-
-//	char* newPath = (char*)malloc(MAX_STRING * sizeof(char));
-//	if(newPath==NULL){
-//		printf(ERROR_ALLOCAT);
-	//	free(input);
-//		return NULL;
-	//}
-	//strcpy(newPath,"");
-	//strcpy(newPath,imagesPath);
-	//strtok(newPath,"images/");
-
-
-
+	char* newPath = (char*) malloc(MAX_STRING * sizeof(char));
+	if (newPath == NULL) {
+		printf(ERROR_ALLOCAT);
+		return NULL;
+	}
+	strcpy(newPath, "./");
+	strcat(newPath, input);
+	strtok(newPath, "\n");
+	free(input);
+	return newPath;
 
 }
 void validateCharAllocation(char** validationArray, int size) {
@@ -349,4 +335,22 @@ void destroyValidationArrayBySize(char** validationArray, int size) {
 		}
 	}
 	free(validationArray);
+}
+
+char* trimImageNameFromPath(char* path) {
+	char* imageName = (char*)malloc(MAX_FILE_NAME*sizeof(char));
+	//if allocation failed, return path - cause the proccess is going to end anyway...
+	if(imageName==NULL){
+		return path;
+	}
+	char* token;
+	token = strtok(path,"/");
+	while(token!=NULL) {
+		token=strtok(NULL,"/");
+		if(token!=NULL) {
+			strcpy(imageName,token);
+		}
+	}
+
+	return imageName;
 }

@@ -57,7 +57,7 @@ int main() {
 		destroyInputs(imagesSuffix, imagesPrefix, imagesPath);
 		return 0;
 	}
-	char* query = queryOrTerminate(imagesPath);
+	char* query = queryOrTerminate();
 	if (query == NULL) {
 		destroy(RGBHistograms, SIFTDatabase, imagesSuffix, imagesPrefix,
 				imagesPath, validationArray, numOfImages);
@@ -93,6 +93,8 @@ int main() {
 				numOfImages, featuresPerImage);
 		destroyHistOrSIFT(RGBQuery);
 		destroyHistOrSIFT(SIFTQuery);
+		free(query);
+		query = queryOrTerminate();
 	}
 	destroy(RGBHistograms, SIFTDatabase, imagesSuffix, imagesPrefix, imagesPath,
 			validationArray, numOfImages);
